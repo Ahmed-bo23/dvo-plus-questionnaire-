@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>DVO+ | Discovery & Infrastructure Questionnaire</title>
+<style>
+  :root {
+    --navy: #0d1728;
+    --navy-2: #294c6c;
+    --teal: #477da5;
+    --teal-dark: #315f83;
+    --ink: #152033;
+    --muted: #687587;
+    --line: #d9e1eb;
+    --surface: #ffffff;
+    --canvas: #f2f5fa;
+    --pale: #e8eff7;
+    --focus: #8fb3d2;
+    --danger: #b42318;
+    --radius: 9px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--canvas); color: var(--ink); font-family: "Arial Narrow", "PT Sans Narrow", "Roboto Condensed", "Segoe UI", Arial, sans-serif; line-height: 1.5; }
+  button, input, textarea, select { font: inherit; }
+  button { cursor: pointer; }
+  .topline { height: 5px; background: linear-gradient(90deg, var(--teal), #68d3d5 48%, var(--navy)); }
+  .app-header { background: var(--surface); border-bottom: 1px solid var(--line); }
+  .header-inner { max-width: 1240px; margin: 0 auto; padding: 20px 26px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 180px; }
+  .brand-logo { display: block; width: 72px; height: 62px; object-fit: contain; flex: 0 0 auto; }
+  .brand-name { font-size: 19px; font-weight: 850; letter-spacing: .3px; color: var(--navy); }
+  .brand-tagline { color: var(--muted); font-size: 10px; letter-spacing: 1.4px; font-weight: 750; text-transform: uppercase; }
+  .header-label { text-align: right; }
+  .eyebrow { color: var(--teal-dark); font-weight: 800; font-size: 11px; letter-spacing: 1.8px; text-transform: uppercase; }
+  .header-label strong { display: block; color: var(--navy); font-size: 14px; margin-top: 3px; }
+  .shell { max-width: 1240px; margin: 28px auto 56px; padding: 0 26px; }
+  .hero { background: #edf2f8; color: var(--navy); border: 1px solid #e0e7f0; border-radius: 5px; padding: 34px 36px 30px; position: relative; overflow: hidden; box-shadow: none; }
+  .hero::after { content: ""; position: absolute; width: 270px; height: 270px; background: radial-gradient(ellipse at center, rgba(169,193,218,.23), rgba(169,193,218,0) 68%); right: -72px; top: -100px; pointer-events: none; }
+  .hero-wave { position: absolute; z-index: 0; width: 44%; min-width: 220px; height: 100%; right: 0; top: 0; opacity: .72; pointer-events: none; }
+  .hero-inner { position: relative; z-index: 1; }
+  .hero .eyebrow { color: var(--teal-dark); }
+  h1 { margin: 9px 0 8px; max-width: 800px; color: var(--navy); font-size: clamp(28px, 3.2vw, 42px); letter-spacing: -.7px; line-height: 1.12; }
+  .hero-description { margin: 0; max-width: 770px; color: #46556a; font-size: 15px; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 23px; }
+  .meta-pill { border: 1px solid #d1dce8; background: rgba(255,255,255,.55); color: #334760; padding: 7px 11px; border-radius: 4px; font-size: 12px; }
+  .info-note { margin-top: 18px; padding: 14px 16px; border: 1px solid #d7e4f0; border-left: 4px solid #477da5; background: #edf3f9; color: #2b3c52; border-radius: 4px; display: flex; gap: 11px; align-items: flex-start; font-size: 13px; }
+  .info-note .info-icon { flex: 0 0 auto; width: 23px; height: 23px; border-radius: 50%; background: #dce8f4; color: #315f83; display: grid; place-items: center; font-weight: 900; font-size: 13px; }
+  .layout { display: grid; grid-template-columns: 272px minmax(0, 1fr); align-items: start; gap: 22px; margin-top: 22px; }
+  .side-card, .form-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 3px 12px rgba(19,39,62,.025); }
+  .side-card { padding: 19px 14px 15px; position: sticky; top: 16px; }
+  .side-title { padding: 0 10px 13px; border-bottom: 1px solid var(--line); color: var(--muted); text-transform: uppercase; font-weight: 800; font-size: 10px; letter-spacing: 1.5px; }
+  .section-nav { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 4px; }
+  .section-nav button { border: 0; width: 100%; background: transparent; text-align: left; display: flex; align-items: center; gap: 11px; padding: 10px; border-radius: 11px; color: #4d6073; font-size: 12.5px; font-weight: 650; transition: background .15s, color .15s; }
+  .section-nav button:hover { background: #f2f6fa; }
+  .section-nav button.active { background: var(--pale); color: var(--navy); }
+  .nav-num { display: grid; place-items: center; width: 27px; height: 27px; flex: 0 0 27px; border-radius: 9px; border: 1px solid #d7e2ea; background: white; color: #718297; font-size: 11px; font-weight: 800; }
+  .section-nav button.active .nav-num { background: var(--teal); border-color: var(--teal); color: white; }
+  .section-nav button.complete .nav-num { background: var(--navy); border-color: var(--navy); color: white; }
+  .nav-check { color: var(--teal-dark); font-weight: 900; margin-left: auto; }
+  .side-progress { padding: 16px 10px 2px; margin-top: 13px; border-top: 1px solid var(--line); }
+  .progress-copy { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 11px; margin-bottom: 8px; }
+  .progress-copy strong { color: var(--navy); }
+  .progress-track { height: 6px; border-radius: 9px; background: #e8eef3; overflow: hidden; }
+  .progress-fill { width: 12.5%; height: 100%; border-radius: inherit; background: var(--teal); transition: width .2s ease; }
+  .side-footnote { color: #748397; font-size: 11px; margin: 15px 10px 2px; }
+  .form-card { overflow: hidden; min-width: 0; }
+  .form-top { padding: 23px 28px 19px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+  .form-top .step-kicker { color: var(--teal-dark); text-transform: uppercase; font-weight: 850; font-size: 10px; letter-spacing: 1.6px; }
+  .form-top h2 { color: var(--navy); font-size: 23px; letter-spacing: -.45px; margin: 4px 0 2px; }
+  .form-top p { color: var(--muted); margin: 0; font-size: 12.5px; }
+  .step-chip { white-space: nowrap; border-radius: 10px; background: #f2f7fa; color: var(--navy-2); font-weight: 800; font-size: 11px; padding: 8px 10px; border: 1px solid #e0e8ee; }
+  .step-panel { padding: 24px 28px 10px; }
+  .step-panel[hidden] { display: none !important; }
+  .question { padding: 0 0 21px; margin: 0 0 21px; border-bottom: 1px solid #edf1f5; break-inside: avoid; }
+  .question:last-child { border-bottom: 0; }
+  .question label, .question legend { display: block; font-weight: 750; font-size: 13.5px; color: #20374e; margin-bottom: 6px; }
+  .question .hint { color: var(--muted); font-size: 11.5px; margin: 0 0 10px; }
+  .required { color: #d1534c; font-weight: 900; margin-left: 3px; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select {
+    appearance: none; display: block; width: 100%; min-height: 44px; border: 1px solid #cfdbe5; background: white; border-radius: 9px; padding: 11px 12px; color: var(--ink); outline: none; transition: border-color .15s, box-shadow .15s; font-size: 13px;
+  }
+  textarea { min-height: 100px; resize: vertical; line-height: 1.5; }
+  input::placeholder, textarea::placeholder { color: #9aa9b7; }
+  input:focus, textarea:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(71,125,165,.14); }
+  .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+  .field-grid .question { margin: 0; }
+  fieldset.question { border: 0; padding-left: 0; padding-right: 0; min-width: 0; }
+  .choice-grid { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 10px; }
+  .choice { position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid #d5e0e8; background: #fff; border-radius: 9px; color: #42566a; font-size: 12px; cursor: pointer; }
+  .choice:has(input:checked) { background: #eaf1f8; border-color: var(--teal); color: var(--navy); }
+  .choice input { accent-color: var(--teal-dark); margin: 0; }
+  .answer-safety { padding: 11px 13px; background: #fff8e8; border: 1px solid #f0dca9; color: #76551b; border-radius: 10px; font-size: 11.5px; margin: 0 0 18px; }
+  .form-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 28px 23px; border-top: 1px solid var(--line); background: #fbfcfd; }
+  .btn-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .btn { display: inline-flex; justify-content: center; align-items: center; gap: 8px; border-radius: 9px; padding: 11px 15px; font-size: 12.5px; line-height: 1.1; font-weight: 800; border: 1px solid transparent; transition: transform .12s, background .12s; }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--navy); color: white; }
+  .btn-primary:hover { background: #244664; }
+  .btn-teal { background: #315f83; color: white; }
+  .btn-teal:hover { background: #244d6d; }
+  .btn-secondary { background: white; color: var(--navy); border-color: #d2dfe8; }
+  .btn-secondary:hover { background: #f2f6fa; }
+  .btn-quiet { color: #647589; background: transparent; border-color: transparent; }
+  .btn-quiet:hover { background: #eef3f6; }
+  .footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; color: #758397; font-size: 11px; padding: 20px 3px 0; }
+  .footer strong { color: var(--navy); }
+  .pdf-action { display: flex; align-items: center; gap: 12px; justify-content: flex-end; }
+  .pdf-action .btn { min-height: 43px; padding: 13px 18px; font-size: 13px; }
+  .pdf-action-note { max-width: 240px; color: var(--muted); font-size: 10.5px; line-height: 1.4; }
+  .print-section-head { display: none; }
+  .toast { display: none; position: fixed; right: 22px; bottom: 22px; max-width: min(420px, calc(100vw - 44px)); background: var(--navy); color: white; padding: 13px 16px; border-radius: 12px; box-shadow: 0 10px 35px rgba(16,37,63,.25); z-index: 100; font-size: 13px; }
+  .toast.show { display: block; animation: pop .18s ease-out; }
+  @keyframes pop { from { transform: translateY(7px); opacity: .4 } to { transform: translateY(0); opacity: 1 } }
+  .print-header, .print-cover { display: none; }
+  .visually-hidden { position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .side-card { position: static; }
+    .section-nav { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .side-footnote { display: none; }
+  }
+  @media (max-width: 600px) {
+    .header-inner { padding: 15px 17px; align-items: flex-start; }
+    .header-label { display: none; }
+    .brand-logo { width: 60px; height: 52px; }
+    .shell { padding: 0 13px; margin-top: 14px; }
+    .hero { padding: 26px 22px; border-radius: 17px; }
+    .hero-description { font-size: 13px; }
+    .layout { margin-top: 14px; gap: 14px; }
+    .section-nav { grid-template-columns: 1fr; }
+    .form-top { padding: 20px 18px 16px; align-items: flex-start; }
+    .form-top h2 { font-size: 20px; }
+    .step-chip { font-size: 10px; }
+    .step-panel { padding: 20px 18px 4px; }
+    .form-actions { padding: 16px 18px 19px; flex-wrap: wrap; }
+    .form-actions > .btn-row { width: 100%; }
+    .form-actions .btn { flex: 1; }
+    .pdf-action { width: 100%; justify-content: stretch; flex-direction: column; align-items: stretch; }
+    .pdf-action .btn { width: 100%; }
+    .pdf-action-note { max-width: none; text-align: center; }
+    .field-grid { grid-template-columns: 1fr; }
+    .footer { padding-left: 4px; padding-right: 4px; }
+  }
+  @page { size: A4; margin: 15mm 14mm 16mm; }
+  @media print {
+    :root { --ink: #172b40; }
+    body { background: white !important; color: #172b40; font-size: 10pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .topline { height: 4px; }
+    .app-header { border-bottom: 1px solid #d9e2e9; }
+    .header-inner { padding: 10px 0 12px; max-width: none; }
+    .brand-logo { width: 62px; height: 54px; }
+    .header-label { display: block; }
+    .shell { max-width: none; margin: 15px 0 0; padding: 0; }
+    .hero { background: #edf2f8 !important; border: 1px solid #e0e7f0; border-radius: 3px; box-shadow: none; padding: 19px 21px; break-inside: avoid; }
+    .hero-wave { opacity: .45; }
+    h1 { font-size: 23pt; }
+    .hero-description { font-size: 9.5pt; }
+    .hero-meta { margin-top: 12px; }
+    .meta-pill { font-size: 8pt; padding: 4px 8px; border-radius: 3px; }
+    .info-note { margin-top: 10px; font-size: 8.2pt; padding: 9px 11px; background: #edf3f9 !important; }
+    .layout { display: block; margin-top: 0; }
+    .side-card, .form-actions, .footer, .toast, .screen-only, .form-top { display: none !important; }
+    .form-card { border: 0; box-shadow: none; overflow: visible; }
+    .step-panel, .step-panel[hidden] { display: block !important; visibility: visible !important; padding: 10px 0 0; break-before: auto; page-break-before: auto; }
+    .step-panel:not([data-step="0"]) { break-before: page; page-break-before: always; }
+    .print-section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin: 0 0 16px; padding: 0 0 10px; border-bottom: 2px solid #b6c9dc; break-after: avoid; }
+    .print-section-kicker { color: #315f83; font-size: 8pt; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 3px; }
+    .print-section-head h3 { margin: 0; font-size: 17pt; line-height: 1.1; color: #0d1728; }
+    .print-section-head p { margin: 4px 0 0; color: #627286; font-size: 8.5pt; }
+    .print-section-pill { color: #5e7287; font-size: 7pt; text-transform: uppercase; letter-spacing: .8px; white-space: nowrap; border: 1px solid #d8e2ec; padding: 4px 6px; border-radius: 3px; }
+    .question { padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid #e0e7ed; break-inside: avoid; page-break-inside: avoid; }
+    .question label, .question legend { font-size: 10pt; margin-bottom: 4px; }
+    .question .hint { font-size: 8pt; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select {
+      min-height: 27px; border: 1px solid #bac8d3; border-radius: 4px; padding: 6px 7px; font-size: 9.5pt; background: white !important; box-shadow: none !important; color: #172b40 !important;
+    }
+    textarea { min-height: 55px; resize: none; overflow: visible; }
+    .choice { font-size: 8.5pt; padding: 4px 7px; border-radius: 3px; }
+    .choice-grid { gap: 5px; }
+    .answer-safety { font-size: 8.2pt; background: #f4f6fa !important; border-color: #dbe3ec; color: #4c5c70; }
+    .print-header { display: block; }
+    a { color: inherit; text-decoration: none; }
+    .field-grid { gap: 10px; }
+    .btn-teal, .btn-primary { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+
+  /* Fixed one-screen experience: navigation changes sections, not page scroll. */
+  @media screen {
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+    body { height: 100vh; height: 100dvh; }
+    .app-header .header-inner {
+      height: 72px; min-height: 72px; padding: 7px 22px;
+    }
+    .brand-logo { width: 54px; height: 52px; }
+    .brand { gap: 9px; }
+    .brand-name { font-size: 17px; }
+    .brand-tagline { font-size: 9px; }
+    .header-label strong { font-size: 12px; }
+
+    .shell {
+      height: calc(100vh - 77px); height: calc(100dvh - 77px);
+      max-width: 1440px; margin: 0 auto; padding: 10px 18px 10px;
+      display: grid; grid-template-rows: 48px auto minmax(0, 1fr);
+      gap: 9px; overflow: hidden; min-height: 0;
+    }
+    .hero {
+      min-height: 0; height: 48px; padding: 7px 16px; border-radius: 5px;
+      display: flex; align-items: center; box-shadow: none;
+    }
+    .hero::after, .hero-wave { display: none; }
+    .hero-inner { display: flex; align-items: center; min-width: 0; }
+    .hero .eyebrow { display: none; }
+    .hero h1 { font-size: 17px; line-height: 1.2; margin: 0; letter-spacing: -.2px; }
+    .hero-description, .hero-meta { display: none; }
+
+    .info-note {
+      margin: 0; padding: 8px 12px; min-height: 42px; max-height: 52px;
+      overflow: hidden; align-items: center; gap: 9px; border-radius: 5px;
+      font-size: 10.5px; line-height: 1.35;
+    }
+    .info-note .info-icon { width: 20px; height: 20px; font-size: 11px; }
+    .layout {
+      min-height: 0; height: 100%; margin: 0; gap: 13px;
+      grid-template-columns: 226px minmax(0, 1fr); align-items: stretch;
+      overflow: hidden;
+    }
+    .side-card {
+      min-height: 0; height: 100%; padding: 12px 10px 9px;
+      position: static; top: auto; overflow: hidden; display: flex; flex-direction: column;
+    }
+    .side-title { padding: 0 8px 8px; font-size: 9px; }
+    .section-nav { margin: 7px 0 0; gap: 2px; min-height: 0; }
+    .section-nav button { gap: 8px; padding: 7px 8px; border-radius: 6px; font-size: 11px; line-height: 1.2; }
+    .nav-num { width: 23px; height: 23px; flex-basis: 23px; border-radius: 6px; font-size: 10px; }
+    .side-progress { margin-top: auto; padding: 10px 8px 0; }
+    .progress-copy { font-size: 10px; margin-bottom: 6px; }
+    .progress-track { height: 5px; }
+    .side-footnote { margin: 9px 8px 0; font-size: 9px; line-height: 1.3; }
+
+    .form-card {
+      height: 100%; min-height: 0; min-width: 0; overflow: hidden;
+      display: grid; grid-template-rows: auto minmax(0, 1fr) auto;
+      border-radius: 7px; box-shadow: none;
+    }
+    .form-top { min-height: 67px; padding: 10px 20px 9px; gap: 12px; }
+    .form-top .step-kicker { font-size: 9px; letter-spacing: 1.3px; }
+    .form-top h2 { font-size: 18px; line-height: 1.2; margin: 3px 0 2px; }
+    .form-top p { font-size: 10.5px; line-height: 1.3; }
+    .step-chip { padding: 6px 8px; border-radius: 6px; font-size: 10px; }
+    .step-panel { min-height: 0; overflow: hidden; padding: 12px 20px 2px; }
+    .question { padding: 0 0 9px; margin: 0 0 9px; }
+    .question label, .question legend { font-size: 12px; line-height: 1.25; margin-bottom: 5px; }
+    .question .hint { font-size: 10px; line-height: 1.3; margin: 0 0 6px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select {
+      min-height: 35px; padding: 7px 10px; border-radius: 6px; font-size: 12px;
+    }
+    textarea { height: 58px; min-height: 58px; max-height: 76px; resize: none; overflow: auto; line-height: 1.35; }
+    .field-grid { gap: 10px; }
+    .choice-grid { gap: 6px; margin-top: 6px; }
+    .choice { gap: 6px; padding: 7px 9px; border-radius: 6px; font-size: 10.5px; line-height: 1.2; }
+    .answer-safety { padding: 7px 10px; border-radius: 6px; font-size: 10px; line-height: 1.3; margin: 0 0 8px; }
+    .form-actions { min-height: 56px; padding: 8px 18px; gap: 10px; }
+    .btn-row { gap: 7px; }
+    .btn { padding: 10px 12px; border-radius: 6px; font-size: 11px; }
+    .pdf-action { gap: 9px; }
+    .pdf-action .btn { min-height: 38px; padding: 10px 14px; font-size: 11.5px; }
+    .pdf-action-note { max-width: 225px; font-size: 9.5px; line-height: 1.25; }
+    .footer { display: none !important; }
+    .toast { right: 14px; bottom: 14px; font-size: 11px; padding: 10px 12px; }
+  }
+
+  @media screen and (max-height: 760px) {
+    .app-header .header-inner { height: 63px; min-height: 63px; padding: 5px 18px; }
+    .brand-logo { width: 48px; height: 46px; }
+    .shell { height: calc(100vh - 69px); height: calc(100dvh - 69px); padding: 7px 12px; gap: 6px; grid-template-rows: 38px auto minmax(0, 1fr); }
+    .hero { height: 38px; padding: 5px 12px; }
+    .hero h1 { font-size: 15px; }
+    .info-note { min-height: 36px; max-height: 42px; padding: 5px 9px; font-size: 9.5px; }
+    .info-note .info-icon { width: 18px; height: 18px; }
+    .layout { gap: 8px; }
+    .side-card { padding: 8px 7px 6px; }
+    .section-nav button { padding: 5px 6px; font-size: 10px; }
+    .nav-num { width: 20px; height: 20px; flex-basis: 20px; }
+    .side-title { padding-bottom: 6px; }
+    .side-footnote { display: none; }
+    .form-top { min-height: 55px; padding: 7px 14px 6px; }
+    .form-top h2 { font-size: 16px; }
+    .form-top p { font-size: 9.5px; }
+    .step-panel { padding: 8px 14px 0; }
+    .question { padding-bottom: 6px; margin-bottom: 6px; }
+    .question label, .question legend { font-size: 11px; margin-bottom: 3px; }
+    .question .hint { font-size: 9px; margin-bottom: 4px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select { min-height: 30px; padding: 5px 8px; font-size: 11px; }
+    textarea { height: 43px; min-height: 43px; max-height: 56px; }
+    .choice-grid { gap: 4px; margin-top: 4px; }
+    .choice { padding: 5px 7px; font-size: 9.5px; }
+    .answer-safety { padding: 6px 8px; font-size: 9px; margin-bottom: 4px; }
+    .form-actions { min-height: 45px; padding: 5px 12px; }
+    .btn { padding: 8px 10px; font-size: 10px; }
+    .pdf-action .btn { min-height: 32px; padding: 8px 10px; font-size: 10.5px; }
+    .pdf-action-note { font-size: 8.5px; max-width: 190px; }
+  }
+
+  @media screen and (max-width: 900px) {
+    .shell { max-width: none; padding-left: 10px; padding-right: 10px; }
+    .layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+    .side-card { height: auto; padding: 5px 6px; }
+    .side-title, .side-progress, .side-footnote { display: none !important; }
+    .side-card nav { min-width: 0; }
+    .section-nav { display: flex; align-items: center; margin: 0; padding: 0 0 2px; gap: 4px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+    .section-nav::-webkit-scrollbar { display: none; }
+    .section-nav li { flex: 0 0 auto; }
+    .section-nav button { width: auto; min-width: 36px; justify-content: center; padding: 5px 7px; }
+    .section-nav button > span:not(.nav-num):not(.nav-check) { display: none; }
+    .nav-check { margin-left: 0; font-size: 10px; }
+    .form-card { min-height: 0; }
+  }
+
+  @media screen and (max-width: 600px) {
+    .app-header .header-inner { height: 58px; min-height: 58px; padding: 4px 10px; align-items: center; }
+    .brand-logo { width: 42px; height: 42px; }
+    .brand-name { font-size: 15px; }
+    .brand-tagline { font-size: 7px; letter-spacing: 1px; }
+    .shell { height: calc(100vh - 64px); height: calc(100dvh - 64px); padding: 6px 7px; gap: 5px; grid-template-rows: 34px auto minmax(0, 1fr); }
+    .hero { height: 34px; padding: 4px 9px; }
+    .hero h1 { font-size: 13px; }
+    .info-note { min-height: 34px; max-height: 44px; font-size: 9px; padding: 4px 7px; }
+    .info-note .info-icon { display: none; }
+    .layout { gap: 5px; }
+    .side-card { padding: 3px; }
+    .section-nav { gap: 3px; }
+    .section-nav button { padding: 4px 6px; font-size: 9px; }
+    .nav-num { width: 18px; height: 18px; flex-basis: 18px; font-size: 8px; }
+    .form-top { min-height: 52px; padding: 6px 9px; }
+    .form-top h2 { font-size: 14px; }
+    .form-top p { font-size: 8.5px; }
+    .step-chip { font-size: 8px; padding: 4px 5px; }
+    .step-panel { padding: 6px 9px 0; }
+    .question { padding-bottom: 5px; margin-bottom: 5px; }
+    .question label, .question legend { font-size: 10px; }
+    .question .hint { font-size: 8px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select { min-height: 27px; padding: 4px 6px; font-size: 10px; }
+    textarea { min-height: 36px; height: 36px; max-height: 45px; }
+    .choice { padding: 4px 5px; font-size: 8.5px; }
+    .choice-grid { gap: 3px; }
+    .answer-safety { font-size: 8px; padding: 4px 6px; }
+    .form-actions { min-height: 42px; padding: 4px 7px; gap: 5px; }
+    .btn { padding: 7px 8px; font-size: 9px; }
+    .pdf-action { gap: 5px; }
+    .pdf-action .btn { min-height: 29px; padding: 7px 8px; font-size: 9px; }
+    .pdf-action-note { max-width: 120px; font-size: 7.5px; }
+  }
+
+</style>
+</head>
+<body>
+<div class="topline"></div>
+<header class="app-header">
+  <div class="header-inner">
+    <div class="brand" aria-label="DVO+ Optimize Your Cloud">
+      <img class="brand-logo" src="data:image/png;base64,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" alt="DVO+ — Optimize Your Cloud">
+    </div>
+    <div class="header-label">
+      <div class="eyebrow">Client Assessment</div>
+      <strong>Discovery & Infrastructure Questionnaire</strong>
+    </div>
+  </div>
+</header>
+
+<main class="shell">
+  <section class="hero">
+    <svg class="hero-wave" viewBox="0 0 520 280" preserveAspectRatio="none" aria-hidden="true">
+      <g fill="none" stroke="#9eb6cf" stroke-width="1.05" opacity=".8">
+        <path d="M180,-12 C290,42 270,150 355,168 S465,132 530,80"/>
+        <path d="M190,-12 C300,42 280,150 365,168 S475,132 540,80"/>
+        <path d="M200,-12 C310,42 290,150 375,168 S485,132 550,80"/>
+        <path d="M210,-12 C320,42 300,150 385,168 S495,132 560,80"/>
+        <path d="M220,-12 C330,42 310,150 395,168 S505,132 570,80"/>
+        <path d="M230,-12 C340,42 320,150 405,168 S515,132 580,80"/>
+        <path d="M240,-12 C350,42 330,150 415,168 S525,132 590,80"/>
+        <path d="M250,-12 C360,42 340,150 425,168 S535,132 600,80"/>
+        <path d="M260,-12 C370,42 350,150 435,168 S545,132 610,80"/>
+      </g>
+    </svg>
+    <div class="hero-inner">
+      <div class="eyebrow">Technical Questionnaire</div>
+      <h1>Discovery &amp; Infrastructure Assessment</h1>
+      <p class="hero-description">Help our team understand your application, cloud environment, delivery workflow, security practices, and DevOps priorities. Please complete the applicable questions as accurately as possible.</p>
+      <div class="hero-meta">
+        <span class="meta-pill">Prepared by DVO+</span>
+        <span class="meta-pill">8 assessment sections</span>
+        <span class="meta-pill">Client-completed questionnaire</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="info-note" role="note">
+    <span class="info-icon" aria-hidden="true">i</span>
+    <div><strong>How to complete this assessment:</strong> Work through all 8 sections, using Next section or the section list to move around. You can save a PDF at any time. For a complete assessment, review every section before sending the PDF to your DVO+ contact. <strong>Your answers stay only in this open page; they are not automatically saved, uploaded, or sent.</strong></div>
+  </div>
+
+  <div class="layout">
+    <aside class="side-card" aria-label="Questionnaire sections">
+      <div class="side-title">Assessment sections</div>
+      <nav>
+        <ol class="section-nav" id="sectionNav">
+          <li><button class="active" type="button" data-go="0"><span class="nav-num">01</span><span>General Information</span></button></li>
+          <li><button type="button" data-go="1"><span class="nav-num">02</span><span>Cloud &amp; Environment</span></button></li>
+          <li><button type="button" data-go="2"><span class="nav-num">03</span><span>Technology Stack</span></button></li>
+          <li><button type="button" data-go="3"><span class="nav-num">04</span><span>Compute &amp; Resources</span></button></li>
+          <li><button type="button" data-go="4"><span class="nav-num">05</span><span>Architecture &amp; Containers</span></button></li>
+          <li><button type="button" data-go="5"><span class="nav-num">06</span><span>CI/CD &amp; Automation</span></button></li>
+          <li><button type="button" data-go="6"><span class="nav-num">07</span><span>Observability &amp; Security</span></button></li>
+          <li><button type="button" data-go="7"><span class="nav-num">08</span><span>Pain Points &amp; Goals</span></button></li>
+        </ol>
+      </nav>
+      <div class="side-progress">
+        <div class="progress-copy"><span>Overall progress</span><strong id="progressText">Section 1 of 8</strong></div>
+        <div class="progress-track" role="progressbar" aria-label="Questionnaire section progress" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <p class="side-footnote">For any item you cannot confirm, enter “Unknown” or “N/A” where applicable.</p>
+    </aside>
+
+    <form class="form-card" id="questionnaire" autocomplete="on" novalidate>
+      <div class="form-top">
+        <div>
+          <div class="step-kicker" id="stepKicker">Section 01</div>
+          <h2 id="stepTitle">General Information</h2>
+          <p id="stepSubtitle">Tell us who is completing the assessment and what the project is about.</p>
+        </div>
+        <div class="step-chip" id="stepChip">01 / 08</div>
+      </div>
+
+      <section class="step-panel" data-step="0" aria-labelledby="stepTitle">
+        <div class="print-section-head">
+          <div><div class="print-section-kicker">SECTION 01 / 08</div><h3>General Information</h3><p>Tell us who is completing the assessment and what the project is about.</p></div>
+          <span class="print-section-pill">DVO+ Assessment</span>
+        </div>
+        <div class="question">
+          <label for="name">Name <span class="required">*</span></label>
+          <input id="name" name="name" type="text" placeholder="Enter your full name" required autocomplete="name">
+        </div>
+        <div class="question">
+          <label for="company">Company Name <span class="required">*</span></label>
+          <input id="company" name="company" type="text" placeholder="Enter your company name" required autocomplete="organization">
+        </div>
+        <div class="question">
+          <label for="projectOverview">Project Overview <span class="required">*</span></label>
+          <p class="hint">Briefly describe the project, product, or platform this assessment relates to.</p>
+          <textarea id="projectOverview" name="projectOverview" placeholder="Describe your project or platform" required></textarea>
+        </div>
+      </section>
+
+      <section class="step-panel" data-step="1" aria-labelledby="stepTitle" hidden>
+        <div class="print-section-head">
+          <div><div class="print-section-kicker">SECTION 02 / 08</div><h3>Cloud &amp; Environment Overview</h3><p>Describe your current hosting model, cloud providers, and environment layout.</p></div>
+          <span class="print-section-pill">DVO+ Assessment</span>
+        </div>
+        <div class="question">
+          <label for="cloudProviders">Which cloud provider(s) do you currently use (e.g., AWS, Azure, GCP, On-premise)?</label>
+          <input id="cloudProviders" name="cloudProviders" type="text" placeholder="List providers, on-premises environments, or Unknown">
+        </div>
+        <div class="question">
+          <label for="accountsProjects">How many separate accounts, subscriptions, or projects are managed (e.g., separate for Prod, Staging, and Dev)?</label>
+          <input id="accountsProjects" name="accountsProjects" type="text" placeholder="Enter a count and/or environment details">
+        </div>
+        <fieldset class="question">
+          <legend>Are your services hosted in a single geographic region or distributed across multiple locations?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="regions" value="Single geographic region"> Single geographic region</label>
+            <label class="choice"><input type="radio" name="regions" value="Distributed across multiple locations"> Distributed across multiple locations</label>
+            <label class="choice"><input type="radio" name="regions" value="Unknown"> Unknown</label>
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="step-panel" data-step="2" aria-labelledby="stepTitle" hidden>
+        <div class="print-section-head">
+          <div><div class="print-section-kicker">SECTION 03 / 08</div><h3>Technology Stack (Software &amp; Data)</h3><p>Identify the application technologies, databases, messaging systems, and legacy components.</p></div>
+          <span class="print-section-pill">DVO+ Assessment</span>
+        </div>
+        <div class="question">
+          <label for="languages">What languages and versions are used? (e.g., Node.js 18, Python 3.11, Java 17, Go)</label>
+          <textarea id="languages" name="languages" placeholder="List programming languages and versions"></textarea>
+        </div>
+        <div class="question">
+          <label for="ui">What is used for the UI? (e.g., React, Vue, Angular, Next.js)</label>
+          <input id="ui" name="ui" type="text" placeholder="List UI frameworks or technologies">
+        </div>
+        <div class="question">
+          <label for="databases">List all databases currently in production. (e.g., PostgreSQL, MongoDB, MySQL, Redis, Elasticsearch)</label>
+          <textarea id="databases" name="databases" placeholder="List production databases, versions if known, and their purpose"></textarea>
+        </div>
+        <div class="question">
+          <label for="messaging">Do you use any queuing or messaging systems? (e.g., RabbitMQ, Kafka, Pub/Sub)</label>
+          <textarea id="messaging" name="messaging" placeholder="List tools in use, or enter No / Unknown / N/A"></textarea>
+        </div>
+        <fieldset class="question">
+          <legend>Are there any legacy systems or “black box” components that are difficult to update?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="legacy" value="Yes"> Yes</label>
+            <label class="choice"><input type="radio" name="legacy" value="No"> No</label>
+            <label class="choice"><input type="radio" name="legacy" value="Unknown"> Unknown</label>
+          </div>
+          <label class="visually-hidden" for="legacyDetails">Legacy systems details</label>
+          <textarea id="legacyDetails" name="legacyDetails" placeholder="Optional: describe any legacy or difficult-to-update components"></textarea>
+        </fieldset>
+      </section>
+
+      <section class="step-panel" data-step="3" aria-labelledby="stepTitle" hidden>
+        <div class="print-section-head">
+          <div><div class="print-section-kicker">SECTION 04 / 08</div><h3>Compute &amp; Resource Inventory</h3><p>Share approximate resource counts and storage volumes across your environments.</p></div>
+          <span class="print-section-pill">DVO+ Assessment</span>
+        </div>
+        <p class="hint" style="margin:0 0 18px">Approximate figures are acceptable. If the number is not known, enter “Unknown”.</p>
+        <div class="question">
+          <label for="virtualServers">Roughly how many virtual servers (e.g., EC2, Azure VMs, Compute Engine) are active across all environments?</label>
+          <input id="virtualServers" name="virtualServers" type="text" placeholder="Approximate count, N/A, or Unknown">
+        </div>
+        <div class="question">
+          <label for="storageBuckets">How many storage buckets (e.g., S3, Blob Storage, GCS) do you maintain, and what is the approximate data volume?</label>
+          <textarea id="storageBuckets" name="storageBuckets" placeholder="Number of buckets and approximate data volume"></textarea>
+        </div>
+        <div class="question">
+          <label for="managedDatabases">How many managed database instances are running?</label>
+          <input id="managedDatabases" name="managedDatabases" type="text" placeholder="Approximate count, N/A, or Unknown">
+        </div>
+        <div class="question">
+          <label for="loadBalancers">How many load balancers or gateways are currently routing your traffic?</label>
+          <input id="loadBalancers" name="loadBalancers" type="text" placeholder="Approximate count or tool/service name">
+        </div>
+        <div class="question">
+          <label for="faas">Do you utilize function-as-a-service? If so, roughly how many?</label>
+          <input id="faas" name="faas" type="text" placeholder="Yes and approximate count, No, or Unknown">
+        </div>
+      </section>
+
+      <section class="step-panel" data-step="4" aria-labelledby="stepTitle" hidden>
+        <div class="print-section-head">
+          <div><div class="print-section-kicker">SECTION 05 / 08</div><h3>Application Architecture &amp; Containers</h3><p>Describe how the application is structured, deployed, and stores state.</p></div>
+          <span class="print-section-pill">DVO+ Assessment</span>
+        </div>
+        <fieldset class="question">
+          <legend>Is the application containerized (e.g., using Docker)?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="containerized" value="Yes"> Yes</label>
+            <label class="choice"><input type="radio" name="containerized" value="No"> No</label>
+            <label class="choice"><input type="radio" name="containerized" value="Partially"> Partially</label>
+            <label class="choice"><input type="radio" name="containerized" value="Unknown"> Unknown</label>
+          </div>
+        </fieldset>
+        <div class="question">
+          <label for="containerManagement">How are containers managed (e.g., Kubernetes, Managed Container Apps, or basic Docker Compose)?</label>
+          <textarea id="containerManagement" name="containerManagement" placeholder="Describe container management tools or enter N/A / Unknown"></textarea>
+        </div>
+        <fieldset class="question">
+          <legend>Is the system built as a monolith, microservices, or a collection of serverless functions?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="architecture" value="Monolith"> Monolith</label>
+            <label class="choice"><input type="radio" name="architecture" value="Microservices"> Microservices</label>
+            <label class="choice"><input type="radio" name="architecture" value="Collection of serverless functions"> Collection of serverless functions</label>
+            <label class="choice"><input type="radio" name="architecture" value="Hybrid / combination"> Hybrid / combination</label>
+            <label class="choice"><input type="radio" name="architecture" value="Unknown"> Unknown</label>
+          </div>
+        </fieldset>
+        <fieldset class="question">
+          <legend>Is the application stateless, or does it require persistent local disk storage?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="stateStorage" value="Stateless"> Stateless</label>
+            <label class="choice"><input type="radio" name="stateStorage" value="Requires persistent local disk storage"> Requires persistent local disk storage</label>
+            <label class="choice"><input type="radio" name="stateStorage" value="Both"> Both</label>
+            <label class="choice"><input type="radio" name="stateStorage" value="Unknown"> Unknown</label>
+          </div>
+        </fieldset>
+      </section>
+
+      <section class="step-panel" data-step="5" aria-labelledby="stepTitle" hidden>
+        <div class="print-section-head">
+          <div><div class="print-section-kicker">SECTION 06 / 08</div><h3>CI/CD &amp; Automation</h3><p>Tell us how code is hosted, built, and released to production.</p></div>
+          <span class="print-section-pill">DVO+ Assessment</span>
+        </div>
+        <div class="question">
+          <label for="codeHosting">Which platform hosts your code (e.g., GitHub, GitLab, Bitbucket)?</label>
+          <input id="codeHosting" name="codeHosting" type="text" placeholder="List code hosting platforms">
+        </div>
+        <div class="question">
+          <label for="pipelines">What tools currently handle your build and deployment pipelines?</label>
+          <textarea id="pipelines" name="pipelines" placeholder="List CI/CD tools and note any manual steps"></textarea>
+        </div>
+        <fieldset class="question">
+          <legend>Is your infrastructure defined in code (e.g., Terraform, Pulumi) or created manually via a web console?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="infrastructureCode" value="Infrastructure as Code"> Infrastructure as Code</label>
+            <label class="choice"><input type="radio" name="infrastructureCode" value="Manually via web console"> Manually via web console</label>
+            <label class="choice"><input type="radio" name="infrastructureCode" value="Both"> Both</label>
+            <label class="choice"><input type="radio" name="infrastructureCode" value="Other / Unknown"> Other / Unknown</label>
+          </div>
+        </fieldset>
+        <div class="question">
+          <label for="productionFrequency">How often does the team push code to production (e.g., daily, weekly, monthly)?</label>
+          <input id="productionFrequency" name="productionFrequency" type="text" placeholder="e.g., Daily, weekly, monthly, or by environment">
+        </div>
+      </section>
+
+      <section class="step-panel" data-step="6" aria-labelledby="stepTitle" hidden>
+        <div class="print-section-head">
+          <div><div class="print-section-kicker">SECTION 07 / 08</div><h3>Observability &amp; Security</h3><p>Describe your monitoring, logging, secrets-handling, and backup practices.</p></div>
+          <span class="print-section-pill">DVO+ Assessment</span>
+        </div>
+        <div class="question">
+          <label for="monitoring">What tools do you use to track system health and notify the team of failures?</label>
+          <textarea id="monitoring" name="monitoring" placeholder="List monitoring, alerting, and incident/ticketing tools"></textarea>
+        </div>
+        <div class="question">
+          <label for="logs">Where are application and system logs aggregated for troubleshooting?</label>
+          <textarea id="logs" name="logs" placeholder="Describe log storage, aggregation, and access"></textarea>
+        </div>
+        <div class="question">
+          <label for="secrets">How are sensitive items like API keys and database passwords stored and injected into your services?</label>
+          <p class="hint">Describe the process or tool only. Never enter actual passwords, API keys, tokens, private keys, or secret values.</p>
+          <textarea id="secrets" name="secrets" placeholder="e.g., secret manager, vault, environment variables, or current process"></textarea>
+        </div>
+        <div class="question">
+          <label for="backups">What is the current frequency and recovery testing policy for your data backups?</label>
+          <textarea id="backups" name="backups" placeholder="Describe backup frequency, retention, and restore/recovery testing"></textarea>
+        </div>
+      </section>
+
+      <section class="step-panel" data-step="7" aria-labelledby="stepTitle" hidden>
+        <div class="print-section-head">
+          <div><div class="print-section-kicker">SECTION 08 / 08</div><h3>Pain Points &amp; Goals</h3><p>Explain the challenges you want to address and the outcomes that matter most.</p></div>
+          <span class="print-section-pill">DVO+ Assessment</span>
+        </div>
+        <div class="question">
+          <label for="releasePain">What is the most time-consuming or frustrating part of your current release process?</label>
+          <textarea id="releasePain" name="releasePain" placeholder="Describe the main bottlenecks or frustrations"></textarea>
+        </div>
+        <fieldset class="question">
+          <legend>Have you experienced significant downtime or performance issues in the last 90 days?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="downtime" value="Yes"> Yes</label>
+            <label class="choice"><input type="radio" name="downtime" value="No"> No</label>
+            <label class="choice"><input type="radio" name="downtime" value="Unsure"> Unsure</label>
+          </div>
+          <label class="visually-hidden" for="downtimeDetails">Downtime or performance issue details</label>
+          <textarea id="downtimeDetails" name="downtimeDetails" placeholder="Optional: briefly describe the incident(s), impact, or timing"></textarea>
+        </fieldset>
+        <fieldset class="question">
+          <legend>Is reducing the monthly cloud bill a primary driver for this engagement?</legend>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="cloudCost" value="Yes"> Yes</label>
+            <label class="choice"><input type="radio" name="cloudCost" value="No"> No</label>
+            <label class="choice"><input type="radio" name="cloudCost" value="Unsure"> Unsure</label>
+          </div>
+        </fieldset>
+        <div class="question">
+          <label for="desiredOutcome">What is the single most important outcome you want to see from a DevOps intervention?</label>
+          <textarea id="desiredOutcome" name="desiredOutcome" placeholder="Describe the single most important outcome for your team or business"></textarea>
+        </div>
+        <div class="answer-safety"><strong>Before sharing:</strong> review your answers and remove any credentials, passwords, secret tokens, private keys, or full connection strings. This questionnaire asks about security practices—not for secret values.</div>
+      </section>
+
+      <div class="form-actions screen-only">
+        <div class="btn-row">
+          <button class="btn btn-secondary" id="prevBtn" type="button" disabled>← Previous</button>
+          <button class="btn btn-primary" id="nextBtn" type="button">Next section →</button>
+        </div>
+        <div class="pdf-action">
+          <div class="pdf-action-note" id="pdfActionNote">Please review all 8 sections before sending the completed questionnaire.</div>
+          <button class="btn btn-teal" type="button" id="pdfBtn">Save / Download PDF</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="footer">
+    <span><strong>DVO+ | Optimize Your Cloud</strong></span>
+    <span>Sales@dvoplus.com &nbsp;·&nbsp; +20 01027488005 &nbsp;·&nbsp; Cairo, Egypt &nbsp;·&nbsp; dvoplus.com</span>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const panels = [...document.querySelectorAll('.step-panel')];
+  const navButtons = [...document.querySelectorAll('[data-go]')];
+  const titleEl = document.getElementById('stepTitle');
+  const subtitleEl = document.getElementById('stepSubtitle');
+  const kickerEl = document.getElementById('stepKicker');
+  const chipEl = document.getElementById('stepChip');
+  const progressText = document.getElementById('progressText');
+  const progressFill = document.getElementById('progressFill');
+  const progressBar = document.getElementById('progressBar');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const pdfBtn = document.getElementById('pdfBtn');
+  const pdfActionNote = document.getElementById('pdfActionNote');
+  const form = document.getElementById('questionnaire');
+  const toast = document.getElementById('toast');
+  const names = [
+    ['General Information', 'Tell us who is completing the assessment and what the project is about.'],
+    ['Cloud & Environment Overview', 'Describe your current hosting model, cloud providers, and environment layout.'],
+    ['Technology Stack (Software & Data)', 'Identify the main application technologies, databases, messaging systems, and legacy components.'],
+    ['Compute & Resource Inventory', 'Share approximate resource counts and storage volumes across your environments.'],
+    ['Application Architecture & Containers', 'Describe how the application is structured, deployed, and stores state.'],
+    ['CI/CD & Automation', 'Tell us how code is hosted, built, and released to production.'],
+    ['Observability & Security', 'Describe your monitoring, logging, secrets-handling, and backup practices.'],
+    ['Pain Points & Goals', 'Explain the challenges you want to address and the outcomes that matter most.']
+  ];
+  let current = 0;
+  const visited = new Set([0]);
+  let toastTimer;
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
+  }
+  function setStep(index, shouldScroll = false) {
+    current = Math.max(0, Math.min(panels.length - 1, index));
+    visited.add(current);
+    panels.forEach((panel, i) => {
+      panel.hidden = i !== current;
+      panel.setAttribute('aria-hidden', i === current ? 'false' : 'true');
+    });
+    navButtons.forEach((button, i) => {
+      button.classList.toggle('active', i === current);
+      button.classList.toggle('complete', visited.has(i) && i !== current);
+      button.setAttribute('aria-current', i === current ? 'step' : 'false');
+      const number = button.querySelector('.nav-num');
+      if (number) number.textContent = visited.has(i) && i !== current ? '✓' : String(i + 1).padStart(2, '0');
+    });
+    kickerEl.textContent = `Section ${String(current + 1).padStart(2, '0')}`;
+    titleEl.textContent = names[current][0];
+    subtitleEl.textContent = names[current][1];
+    chipEl.textContent = `${String(current + 1).padStart(2, '0')} / ${String(panels.length).padStart(2, '0')}`;
+    progressText.textContent = `${visited.size} of ${panels.length} visited`;
+    progressFill.style.width = `${(visited.size / panels.length) * 100}%`;
+    progressBar.setAttribute('aria-valuenow', String(visited.size));
+    prevBtn.disabled = current === 0;
+    nextBtn.textContent = current === panels.length - 1 ? 'Back to Section 01 ↺' : 'Next section →';
+    if (pdfActionNote) pdfActionNote.textContent = visited.size === panels.length ? 'All 8 sections reviewed. Save your PDF, then send it to your DVO+ contact.' : `You have visited ${visited.size} of 8 sections. Review the rest before sending your completed questionnaire.`;
+    pdfBtn.textContent = visited.size === panels.length ? 'Save Completed PDF' : 'Save / Download PDF';
+    // Keep the app viewport fixed; moving between sections must not scroll the page.
+  }
+  navButtons.forEach(button => button.addEventListener('click', () => setStep(Number(button.dataset.go))));
+  prevBtn.addEventListener('click', () => setStep(current - 1));
+  nextBtn.addEventListener('click', () => {
+    if (current === 0) {
+      const required = [...panels[0].querySelectorAll('[required]')];
+      const missing = required.find(field => !field.value.trim());
+      if (missing) {
+        missing.focus();
+        missing.setCustomValidity('Please complete this required field before continuing.');
+        missing.reportValidity();
+        missing.addEventListener('input', () => missing.setCustomValidity(''), { once: true });
+        return;
+      }
+    }
+    setStep(current === panels.length - 1 ? 0 : current + 1);
+  });
+
+  pdfBtn.addEventListener('click', () => {
+    if (visited.size < panels.length) {
+      const missing = panels.findIndex((panel, index) => !visited.has(index));
+      const proceed = window.confirm(`You have visited ${visited.size} of 8 sections. For a complete assessment, review all 8 sections first.\n\nChoose OK to save a working PDF now, or Cancel to review the remaining sections.`);
+      if (!proceed) {
+        if (missing >= 0) setStep(missing);
+        return;
+      }
+    }
+    // Print CSS expands all eight panels, regardless of which section is open on screen.
+    showToast('In the print dialog, choose “Save as PDF”. Then email the PDF to your DVO+ contact.');
+    window.print();
+  });
+  // Textareas stay compact in the fixed viewport; long answers scroll inside the field itself.
+  window.addEventListener('beforeprint', () => {
+    document.title = 'DVO+ Discovery & Infrastructure Questionnaire';
+    form.querySelectorAll('textarea').forEach(el => { el.style.height = 'auto'; el.style.height = `${Math.max(el.scrollHeight, 55)}px`; });
+  });
+  window.addEventListener('afterprint', () => {
+    // Restore compact field sizing after print preview so the app remains one-screen.
+    form.querySelectorAll('textarea').forEach(el => { el.style.height = ''; });
+  });
+  setStep(0, false);
+})();
+</script>
+</body>
+</html>

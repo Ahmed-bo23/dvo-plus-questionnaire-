@@ -355,6 +355,113 @@
     .pdf-action-note { max-width: 120px; font-size: 7.5px; }
   }
 
+
+  /* Readability refinement: clear business typography without changing the DVO+ visual identity. */
+  :root {
+    --muted: #536579;
+    --line: #d3deea;
+  }
+  body {
+    font-family: Inter, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    line-height: 1.5;
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .header-label strong { font-size: 13px; }
+  .info-note { color: #253b52; }
+  .section-nav button { color: #3e5368; }
+  .side-title { color: #566a7e; }
+  .question label, .question legend { color: #1c344b; }
+  .question .hint { color: #53677d; }
+  input::placeholder, textarea::placeholder { color: #74869a; opacity: 1; }
+
+  @media screen and (min-width: 901px) and (min-height: 761px) {
+    .info-note {
+      font-size: 12px;
+      line-height: 1.42;
+      padding: 9px 13px;
+      max-height: none;
+      min-height: 46px;
+      overflow: visible;
+    }
+    .info-note .info-icon { width: 22px; height: 22px; font-size: 12px; }
+    .layout { grid-template-columns: 244px minmax(0, 1fr); gap: 13px; }
+    .side-title { font-size: 10px; letter-spacing: 1.25px; }
+    .section-nav { gap: 3px; }
+    .section-nav button { font-size: 12.5px; line-height: 1.3; padding: 8px 8px; gap: 9px; }
+    .nav-num { width: 25px; height: 25px; flex-basis: 25px; font-size: 11px; }
+    .progress-copy { font-size: 11px; }
+    .side-footnote { font-size: 10px; line-height: 1.4; }
+    .form-top { min-height: 69px; padding: 11px 21px 10px; }
+    .form-top .step-kicker { font-size: 10.5px; letter-spacing: 1.35px; }
+    .form-top h2 { font-size: 20px; letter-spacing: -.25px; }
+    .form-top p { font-size: 12px; line-height: 1.4; }
+    .step-chip { font-size: 11px; padding: 7px 9px; }
+    .step-panel { padding: 13px 21px 3px; }
+    .question { padding-bottom: 8px; margin-bottom: 8px; }
+    .question label, .question legend { font-size: 13.25px; line-height: 1.35; margin-bottom: 5px; }
+    .question .hint { font-size: 11.5px; line-height: 1.4; margin-bottom: 7px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select {
+      min-height: 37px; padding: 8px 11px; font-size: 13px; line-height: 1.4; border-color: #c4d2df;
+    }
+    textarea { height: 60px; min-height: 60px; max-height: 76px; line-height: 1.45; }
+    .choice-grid { gap: 7px; margin-top: 7px; }
+    .choice { font-size: 11.5px; line-height: 1.3; padding: 7px 9px; color: #344b62; }
+    .answer-safety { font-size: 10.5px; line-height: 1.4; padding: 8px 10px; }
+    .btn { font-size: 12px; }
+    .pdf-action .btn { font-size: 12px; }
+    .pdf-action-note { font-size: 10px; line-height: 1.35; }
+  }
+
+  /* Shorter desktop screens: retain readable type and save space through tighter spacing, not tiny text. */
+  @media screen and (min-width: 901px) and (max-height: 760px) {
+    .info-note { font-size: 11.5px; line-height: 1.35; padding: 6px 10px; max-height: none; min-height: 38px; }
+    .layout { grid-template-columns: 236px minmax(0, 1fr); gap: 9px; }
+    .section-nav button { font-size: 11.5px; padding: 5px 7px; gap: 7px; }
+    .nav-num { width: 22px; height: 22px; flex-basis: 22px; font-size: 10px; }
+    .side-title { font-size: 9.5px; }
+    .progress-copy { font-size: 10.5px; }
+    .form-top { min-height: 54px; padding: 6px 14px; }
+    .form-top .step-kicker { font-size: 9.5px; }
+    .form-top h2 { font-size: 17px; }
+    .form-top p { font-size: 10.5px; }
+    .step-chip { font-size: 10px; }
+    .step-panel { padding: 7px 14px 0; }
+    .question { padding-bottom: 5px; margin-bottom: 5px; }
+    .question label, .question legend { font-size: 12px; line-height: 1.3; margin-bottom: 3px; }
+    .question .hint { font-size: 10px; line-height: 1.3; margin-bottom: 4px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select { min-height: 31px; padding: 5px 8px; font-size: 11.5px; }
+    textarea { height: 44px; min-height: 44px; max-height: 56px; }
+    .choice-grid { gap: 4px; margin-top: 4px; }
+    .choice { padding: 5px 7px; font-size: 10.5px; line-height: 1.25; }
+    .answer-safety { font-size: 9.5px; padding: 5px 8px; }
+    .btn { font-size: 10.5px; }
+    .pdf-action .btn { font-size: 11px; }
+    .pdf-action-note { font-size: 9px; }
+  }
+
+  @media screen and (max-width: 900px) {
+    .info-note { font-size: 11.5px; line-height: 1.4; }
+    .form-top h2 { font-size: 18px; }
+    .form-top p { font-size: 11px; }
+    .question label, .question legend { font-size: 12.5px; }
+    .question .hint { font-size: 10.5px; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select { font-size: 12px; }
+    .choice { font-size: 10.5px; }
+  }
+  @media screen and (max-width: 600px) {
+    .info-note { font-size: 10px; line-height: 1.35; }
+    .form-top h2 { font-size: 15px; }
+    .form-top p { font-size: 9.5px; }
+    .section-nav button { font-size: 9.5px; }
+    .question label, .question legend { font-size: 11px; line-height: 1.3; }
+    .question .hint { font-size: 9px; line-height: 1.3; }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select { font-size: 11px; }
+    .choice { font-size: 9px; }
+    .btn { font-size: 9.5px; }
+  }
+
 </style>
 </head>
 <body>
